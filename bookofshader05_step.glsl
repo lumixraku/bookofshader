@@ -6,10 +6,10 @@ precision mediump float;
 
 uniform vec2 u_resolution;
 uniform float u_time;
-
+float lineWidth = 0.2;
 float plot(vec2 st, float pct){
-  return  smoothstep( pct-0.02, pct, st.y) -
-          smoothstep( pct, pct+0.02, st.y);
+  return  smoothstep( pct-lineWidth, pct, st.y) -
+          smoothstep( pct, pct+lineWidth, st.y);
 }
 
 void main() {
