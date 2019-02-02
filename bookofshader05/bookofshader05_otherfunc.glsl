@@ -10,7 +10,7 @@ uniform float u_time;
 
 void main() {
 float x = 0.7;//1.2
-float y = 0;
+float y = 0.0;
 
 // return x modulo of 0.5 
 y = mod(x,0.5); //  对 x 取模运算 当 x 0.7  1.2 。。得到的结果一样

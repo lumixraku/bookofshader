@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible"
+        content="ie=edge">
+    <title>Document</title>
+</head>
+<script type="text/javascript"
+    src="../GlslCanvas.js"></script>
+
+<body>
+    <div class="ge_canvas_container"
+        style="position: relative; top: 0px;">
+
+
+
+        <canvas id="can"
+            class="ge_canvas"
+            width="800"
+            height="250"
+            data-fragment=""
+            style="background-color: rgb(255, 190, 255);"></canvas>
+    </div>
+
+    <script>
+        var canvas = document.querySelector("#can");
+        var sandbox = new GlslCanvas(canvas);
+        var string_frag_code =
+            `
+            #ifdef GL_ES
+            precision mediump float;
+            #endif
+
+            void main() {
+            gl_FragColor = vec4(0.425,0.875,1.000,1.000);
+            }
+        `
+        sandbox.load(string_frag_code);
+    </script>
+</body>
+
+</html>

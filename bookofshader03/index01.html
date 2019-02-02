@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible"
+        content="ie=edge">
+    <title>Document</title>
+</head>
+<script type="text/javascript"
+    src="../GlslCanvas.js"></script>
+
+<body>
+    <div class="ge_canvas_container"
+        style="position: relative; top: 0px;">
+
+
+
+        <canvas id="can"
+            class="ge_canvas"
+            width="800"
+            height="250"
+            data-fragment=""
+            style="background-color: rgb(255, 190, 255);"></canvas>
+    </div>
+
+    <script>
+        var canvas = document.querySelector("#can");
+        var sandbox = new GlslCanvas(canvas);
+        var string_frag_code =
+            `
+                // Author:
+                // Title:
+
+                #ifdef GL_ES
+                precision mediump float;
+                #endif
+
+                uniform vec2 u_resolution;
+                uniform vec2 u_mouse;
+                uniform float u_time;
+
+                void main() {
+                vec2 st = gl_FragCoord.xy/u_resolution.xy;
+                st.x *= u_resolution.x/u_resolution.y;
+
+                vec3 color = vec3(0.);
+                color = vec3(st.x,st.y,abs(sin(u_time)));
+
+                gl_FragColor = vec4(color,1.0);
+                }
+        `
+        sandbox.load(string_frag_code);
+    </script>
+</body>
+
+</html>

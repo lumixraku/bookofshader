@@ -18,6 +18,7 @@ void main() {
     // Step will return 0.0 unless the value is over 0.5,
     // in that case it will return 1.0
     // step() 阶跃函数  step(x, v)  当 v > x 返回1  否则0 
+    // https://en.wikipedia.org/wiki/Heaviside_step_function
     float y = step(0.3,st.x);
 
     vec3 color = vec3(y);
