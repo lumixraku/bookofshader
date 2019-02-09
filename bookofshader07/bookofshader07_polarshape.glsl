@@ -16,7 +16,7 @@ void main(){
 
     vec3 color = vec3(0.0);
  
-    vec2 pos = vec2(0.5)-st; // 将原点移动到画布正中心sddsdfs颠三倒四返回回复sss
+    vec2 pos = vec2(0.5)-st; // 将原点移动到画布正中心
     pos.x = pos.x + 0.05;// 默认有点偏左
 
     // 首先将笛卡尔坐标系转为 极坐标  用length 得到极坐标的r 用arctan得到极坐标的θ

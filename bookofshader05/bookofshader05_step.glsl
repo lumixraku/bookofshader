@@ -15,9 +15,11 @@ float plot(vec2 st, float pct){
 vec3 fromLeft2Right(vec2 st){
     // Step will return 0.0 unless the value is over 0.5,
     // in that case it will return 1.0
-    // step() 阶跃函数  step(x, v)  当 v > x 返回1  否则0 
+    // step() 阶跃函数  step(edge, v)  当 v > edge 返回1  否则0 
     // https://en.wikipedia.org/wiki/Heaviside_step_function
     float y = step(0.3,st.x);
+    // float y = step(st.x, 0.3); // 和上面的相反效果
+    
 
     vec3 color = vec3(y);
     float pct = plot(st,y);
@@ -47,7 +49,7 @@ void main() {
     vec2 st = gl_FragCoord.xy/u_resolution;
     // glsl的笛卡尔坐标系从原点在左下角  右上角是(1,1)
     
-    // vec3 color = fromLeft2Right(st);
-    vec3 color = fromBottom2Top(st);
+    vec3 color = fromLeft2Right(st);
+    // vec3 color = fromBottom2Top(st);
     gl_FragColor = vec4(color,1.0);
 }
