@@ -1,0 +1,58 @@
+// Author @patriciogv ( patriciogonzalezvivo.com ) - 2015
+// the trick to moving those shapes is to move the coordinate system itself. 
+
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform float u_time;
+float radius=0.01;
+
+
+float box(in vec2 _st, in vec2 _size){
+    //一个box由 两个部分重叠白色方块组成
+    _size = vec2(0.5) - _size*0.5;
+    // 上面的做法是为了让十字居于画布中央
+
+
+    
+    //这是右上方的白色区域
+    vec2 uv = smoothstep(_size,
+                        _size+vec2(radius),
+                        _st);
+    // vec2 uv = smoothstep(_size,
+    //                 _size+vec2(radius),
+    //                 vec2(1.0)-_st);                        
+
+    //这是右下方的白色区域
+    uv *= smoothstep(_size,
+                    _size+vec2(radius),
+                    vec2(1.0)-_st);
+    return uv.x * uv.y;
+}
+
+float cross(in vec2 _st, float _size){
+    // 横轴的box + 纵轴的box
+    return  box(_st, vec2(_size,_size/4.)) +
+            box(_st, vec2(_size/4.,_size));
+}
+
+void main(){
+    vec2 st = gl_FragCoord.xy/u_resolution.xy;
+    vec3 color = vec3(0.0);
+
+    // To move the cross we move the space
+    // sin(float)  cos(float)
+    vec2 translate = vec2(cos(u_time),sin(u_time));
+    // st += translate*0.05;
+
+    // Show the coordinates of the space on the background
+    // color = vec3(st.x,st.y,0.0);
+
+    // Add the shape on the foreground
+    color += vec3(cross(st,0.25));
+
+    gl_FragColor = vec4(color,1.0);
+}
