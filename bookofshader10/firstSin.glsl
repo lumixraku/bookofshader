@@ -34,7 +34,7 @@ void main(){
     float y=fract(sin(st.x)*1.);// 当x的在[0.1,0.9]范围时 y是缓慢变化
 
     
-    // y = rand(st.x);
+    // y = rand(st.x);// rand is not a built-in func
     
     vec3 color=vec3(y);
     
