@@ -11,9 +11,20 @@ uniform float u_time;
 float lineWidth=.1;
 
 float rand(float i){
-return fract(abs(sin(u_time)) * sin(dot(vec2(i),
+// float updown = step(1.,mod(i,2.)) * 2. - 1.;
+return  fract(sin(u_time/50.) * sin(dot(vec2(i),
         vec2(123423.9898,78.233)))*
     458.543);
+
+// return fract(abs(sin(u_time))*sin(dot(vec2(i),    
+// vec2(123423.9898,78.233)))*
+// 458.543);
+}
+
+float random(in vec2 st){
+    return fract(sin(dot(st.xy,
+                vec2(12.9898,78.233)))
+            *43758.5453123);
 }
 
 
@@ -38,7 +49,7 @@ void main(){
     
     float i=floor(st.x);// integer
     float f=fract(st.x);// fraction
-    y=rand(i);
+    y= rand(i);
     // y=rand(i-1.);// 看起来是图形左1一个单位 rand(i+1.)看起来是图形右移动一个单位
 
 
@@ -46,8 +57,6 @@ void main(){
     //mix(a, b, pct) = (1-pct)*a + pct*b
     // The mix function returns the linear blend of x and y,i.e.the product of x and(1-a)plus the product of y and a.
 
-    // i *= sin(u_time);
-    // f *= sin(u_time);
 
     y=mix(rand(i),rand(i+1.),smoothstep(0., 1.,f));
     float u=f*f*(3.-2.*f);// custom cubic curve

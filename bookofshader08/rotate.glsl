@@ -37,6 +37,7 @@ void main(){
     // move space from the center to the vec2(0.0)
     st -= vec2(0.5);
     // rotate the space
+    // st=rotate2d(0.25*PI)*st;
     st = rotate2d( sin(u_time)*PI ) * st;
     // move it back to the original place
     st += vec2(0.5);
