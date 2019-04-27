@@ -41,7 +41,7 @@ float noise(in vec2 st){
     
     // Cubic Hermine Curve.  Same as SmoothStep()
     vec2 u=f*f*(3.-2.*f);
-    u = smoothstep(0.,1.,f);
+    // u = smoothstep(0.,1.,f);
     
     // Mix 4 coorners percentages
     // return mix(a,b,u.x);

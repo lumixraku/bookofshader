@@ -9,6 +9,10 @@ precision mediump float;
 uniform vec2 u_resolution;
 uniform float u_time;
 
+
+// 接受参数是弧度 也就是说想要旋转45° 应该是 PI/4 
+// 数值角度转换公式 180/PI * f 
+// 例如输入弧度 0.9， 转为角度是 51°
 mat2 rotate2d(float _angle){
     return mat2(cos(_angle),-sin(_angle),
                 sin(_angle),cos(_angle));
@@ -36,9 +40,9 @@ void main(){
 
     // move space from the center to the vec2(0.0)
     st -= vec2(0.5);
-    // rotate the space
-    // st=rotate2d(0.25*PI)*st;
-    st = rotate2d( sin(u_time)*PI ) * st;
+    // rotate the space //
+    st=rotate2d(0.25*PI)*st; //弧度0.25*PI 对应角度45° rotate2d(xxx) 单位是rad
+    // st = rotate2d( sin(u_time)*PI ) * st;
     // move it back to the original place
     st += vec2(0.5);
 
