@@ -129,21 +129,21 @@ void main(){
     st.x*=u_resolution.x/u_resolution.y;
     
     vec3 color=vec3(0.);
-    vec2 pos=vec2(st*3.);
+    vec2 pos=vec2(st*8.);
     
     float DF=0.;
     
     // Add a random position
-    float a=0.;
     vec2 vel=vec2(u_time*.1);
     DF+=snoise(pos+vel)*.25+.25;
     
     // Add a random position
+    float a=0.;
     a=snoise(pos*vec2(cos(u_time*.15),sin(u_time*.1))*.1)*3.1415;
     vel=vec2(cos(a),sin(a));
     DF+=snoise(pos+vel)*.25+.25;
     
     color=vec3(smoothstep(.7,.75,fract(DF)));
     
-    gl_FragColor=vec4(1.-color,1.);
+    gl_FragColor=vec4(1.-color,1.);  //反色
 }

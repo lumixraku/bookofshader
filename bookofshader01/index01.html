@@ -22,13 +22,22 @@
             class="ge_canvas"
             width="800"
             height="250"
-            data-fragment=""
             style="background-color: rgb(255, 190, 255);"></canvas>
     </div>
 
     <script>
         var canvas = document.querySelector("#can");
         var sandbox = new GlslCanvas(canvas);
+
+        // Load only the Fragment Shader
+        // var string_frag_code = `void main(){gl_FragColor = vec4(.4, .3, 0.1, 1.0);}`;
+        // sandbox.load(string_frag_code);
+
+        // Load a Fragment and Vertex Shader
+        // var string_vert_code = "attribute vec4 a_position; void main(){gl_Position = a_position;}";
+        // sandbox.load(string_frag_code, string_vert_code);
+
+
         var string_frag_code =
             `
             #ifdef GL_ES
@@ -39,7 +48,11 @@
             gl_FragColor = vec4(0.425,0.875,1.000,1.000);
             }
         `
+
         sandbox.load(string_frag_code);
+
+
+
     </script>
 </body>
 
