@@ -38,8 +38,11 @@ float plot(vec2 st,float y){
     mysmoothstep(y,y+lineWidth,st.y);
 }
 
-void main(){
-    vec2 st=gl_FragCoord.xy/u_resolution;
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord) 
+{
+    vec2 st=(fragCoord)/iResolution.y;
+
     
     // Smooth interpolation between 0.1 and 0.9
     // float y=smoothstep(.1,.9,st.x);// 当x的在[0.1,0.9]范围时 y是缓慢变化
@@ -57,7 +60,7 @@ void main(){
     // color = (1.0-pct)*color + pct*vec3(0.0,1.0,0.0);
     color=pct*vec3(0.,1.,0.);
     
-    gl_FragColor=vec4(color,1.);
+    fragColor=vec4(color,1.);
 }
 
 //ps  此外还有更多step 函数

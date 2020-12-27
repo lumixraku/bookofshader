@@ -9,6 +9,8 @@
 //全局变量和 ShaderToy.com 略有不同
 //iResolution, iGlobalTime, and iDeltaTime, iChannelN are the only uniforms provided.
 
+// iTime in shadertoy while iGlobalTime in vscode.
+
 void main()
 {
 	vec2 uv = gl_FragCoord.xy ;
