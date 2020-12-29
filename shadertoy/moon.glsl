@@ -6,6 +6,23 @@ float randomValueByUV(vec2 p) {
     p += dot(p, p + 123.);
     return fract(p.x * p.y);  // 生成电视机雪花图
 }
+
+vec4 stars(vec2 uv){
+    float t = iTime * .3;
+    float starValue = randomValueByUV(uv);
+    starValue = pow(starValue, 100.);
+
+    // 数字越大 图形越容易在更短的时间内变得很复杂&重复
+    // float twinkle = dot(length(sin(uv + t)), length(cos(uv*vec2(22.,6.7) - t * .3)));
+    float twinkle = sin((uv.x-t+cos(uv.y*20.+t))*10.);
+    twinkle *= cos((uv.y*.234-t*3.24+sin(uv.x*12.3+t*.243))*7.34);
+    // twinkle = (twinkle + 1.)/2.;
+    twinkle = sin(twinkle * .3) * 0.5 + .5;
+    starValue *= twinkle;
+    return  vec4(vec3(starValue), 1.);
+   
+    
+}
 /**
 * 
 画梯形
@@ -134,8 +151,9 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord)
 
     // Output to screen
     fragColor=col;
+    col += stars(uv);
 
-    fragColor = vec4(vec3(randomValueByUV(uv)), 1.);
+    fragColor = col;
 }
 
 // 最终效果以 shadertoy.com 为准。
