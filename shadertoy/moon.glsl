@@ -19,9 +19,7 @@ vec4 stars(vec2 uv){
     // twinkle = (twinkle + 1.)/2.;
     twinkle = sin(twinkle * .3) * 0.5 + .5;
     starValue *= twinkle;
-    return  vec4(vec3(starValue), 1.);
-   
-    
+    return  vec4(vec3(starValue), starValue);
 }
 /**
 * 
@@ -88,7 +86,7 @@ float getRandomHeight(float x) {
 }
 
 vec4 drawLayer(vec2 uv, float blur) {
-    vec4 col = vec4(0.);
+    vec4 col = vec4(0., 0., 0., 0);  // 最后一个分量为 0 表示完全透明
     float idX = floor(uv.x);
     float randomSeed = fract(sin(idX * 324.56)*5424.343) * 2. - 1.;   //[-1, 1]
 
@@ -96,7 +94,7 @@ vec4 drawLayer(vec2 uv, float blur) {
     float randomMountain = getRandomHeight(uv.x);
     // ground 定义了地形的形状
     // y 和 x 关系 是一个 sin 函数的组合
-    float ground = S(blur, -blur, uv.y + randomMountain); 
+    float ground = S(blur, -blur, uv.y + randomMountain); // S 第一个参数大于 0，第二个参数小于 0 表示这个 sin 曲线地步是有颜色的
 
     
     uv.x = fract(uv.x) - .5;
@@ -105,7 +103,7 @@ vec4 drawLayer(vec2 uv, float blur) {
     float randomHeight = getRandomHeight(idX + .5 + x); // 不加 .5 的话 看起来🌲和山坡存在频率不同步的情况 有相位差
     vec2 pos = vec2( x, -randomHeight);   
     
-    col += ground;// 相当于 col += vec4(ground) 
+    col += vec4(vec3(ground), ground);// 相当于 col += vec4(ground) 
 
 
     vec3 treeColor = vec3(1.);
@@ -114,6 +112,7 @@ vec4 drawLayer(vec2 uv, float blur) {
     // 因为 tree 的计算结果 每个 uv 都对应的白色 
     // 树的形状信息保存在 alpha 中
     // 所以使用 mix
+    // return mix(vec4(1,1 ,1 ,1 ), tree, tree.a);
     return mix(col, tree, tree.a);
 }
 
@@ -129,7 +128,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord)
     vec2 M = (iMouse.xy / iResolution.xy) * 2. - 1.;
 
     float thickness=1./iResolution.y;// 表示画布中的一个像素 转为 uv 坐标下的值
-    vec4 col=vec4(0, 0, 0, 1);
+    vec4 col=vec4(0, 0, 0, 0);
 
     // add layer
     vec4 layer;
@@ -151,7 +150,8 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord)
 
     // Output to screen
     fragColor=col;
-    col += stars(uv);
+    vec4 starsColor = stars(uv);
+    col = mix(starsColor, col, col.a); // 看起来 color.a 永远是 1？？
 
     fragColor = col;
 }
