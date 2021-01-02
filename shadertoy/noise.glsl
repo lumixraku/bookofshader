@@ -20,9 +20,29 @@ float N21(vec2 uv) {
     // 这个效果就很不错
     // 后面这个值最好是一个大于 10 的小数
     // 数字越大，越混乱，而且雪花会更加细腻。
-    random = fract(sin((uv.x +uv.y* 142.212)* 10.) * 2342.43);
+    random = fract(sin((uv.x* 100. + uv.y* 2142.212)* 542.));
 
     return random;
+}
+
+float SmoothNoise(vec2 uv){
+    vec2 localUV = fract(uv );
+    vec2 localID = floor(uv );
+    
+    float randomBL = N21(localID);
+    float randomBR = N21(localID + vec2(1, 0));
+    float randomTL = N21(localID + vec2(0, 1));
+    float randomTR = N21(localID + vec2(1, 1));
+    // float random = mix(randomBL, randomBR, localID.x);
+    // localUV = smoothstep(0., 1., localUV); // 不这么做的话 会形成很锋利的边缘
+    // 或者
+    localUV = localUV * localUV * (3. - 2. * localUV);
+
+    float t = mix(randomTL, randomTR, localUV.x);
+    float b = mix(randomBL, randomBR, localUV.x);
+    float random = mix(b, t, localUV.y);
+    return random;
+
 }
 
 void mainImage(out vec4 fragColor,in vec2 
@@ -31,15 +51,17 @@ fragCoord)
 
     // 固定宽高比避免受到画布的影响
     vec2 uv =(fragCoord-.5*iResolution.xy)/iResolution.y;
+    uv = uv + iTime * .1;
+
     
-    
-    float random = N21(uv);
-    // 注意 这个 N21 创建出来的还是伪随机数, 
-    // 只是在有限的屏幕范围中看起来很随机
-    // N21(uv * 0.0001); 这样的话你就可以看出来周期性的图案了。
-    
-    vec3 col=vec3(random);
-    // Output to screen
+    vec3 col=vec3(SmoothNoise(uv * 4.));
+    col += vec3(SmoothNoise(uv* 8.)) * .5;
+    col += vec3(SmoothNoise(uv * 16.) )* .25;
+    col += vec3(SmoothNoise(uv * 32.)) * .125;
+    col += vec3(SmoothNoise(uv * 64.)) * .0625;
+
+    col /= 2.;
+
     fragColor=vec4(col, 1.);
 }
 

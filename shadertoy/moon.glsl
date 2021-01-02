@@ -85,6 +85,16 @@ float getRandomHeight(float x) {
     return sin(x * .3211) + sin(x)* .542;
 }
 
+vec4 moon(vec2 uv, vec4 col, vec2 pos) {
+    float radius = .2;
+    float blur = .01;
+    float moonshape = smoothstep(blur, -blur, length(uv - pos) - radius );
+    float moonshadow = smoothstep(-blur, blur, length(uv - (pos + vec2(.08))) - radius * .8 );
+    vec4 moon = vec4(moonshadow) * vec4(moonshape);
+    return moon;
+}
+
+
 vec4 drawLayer(vec2 uv, float blur) {
     vec4 col = vec4(0., 0., 0., 0);  // 最后一个分量为 0 表示完全透明
     float idX = floor(uv.x);
@@ -130,9 +140,10 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord)
     float thickness=1./iResolution.y;// 表示画布中的一个像素 转为 uv 坐标下的值
     vec4 col=vec4(0, 0, 0, 0);
 
+    col += moon( uv,col,  vec2(.25));
     // add layer
     vec4 layer;
-    for(float i =0.; i <=1.; i+= 1./5.) {
+    for(float i =0.; i <=.8; i+= 1./5.) {
         // 从远到近绘制图层
         float scale = mix(20., 1., i);
         vec2 layerOffset = vec2(iTime * .3 + i * 50., 2.0);  // iTime * .1 是为了增加视差效果 近处的景色移动的更快一些
@@ -140,19 +151,20 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord)
         blur *= mix(.1, .005, i); //越近越模糊
         layer = drawLayer(uv * scale + layerOffset - M, blur);
         // layer.rgb *= i; // 越远越暗
-        layer.rgb *= (1. -i); // 越远越亮
+        layer.rgb *= clamp((1. -i), .1, 1.) ; // 越远越亮
         layer.rgb *= themeColor;
         col = mix(col, layer, layer.a);
         // col += layer;
     }
 
-
-
-    // Output to screen
+    vec4 layerClose = drawLayer(uv + vec2(iTime *.3, 0.5)  - M, blur);
+    layerClose.rgb *= themeColor * .2;
+    col = mix(col, layerClose, layerClose.a);
+    
     fragColor=col;
     vec4 starsColor = stars(uv);
     col = mix(starsColor, col, col.a); // 看起来 color.a 永远是 1？？
-
+    // Output to screen
     fragColor = col;
 }
 
